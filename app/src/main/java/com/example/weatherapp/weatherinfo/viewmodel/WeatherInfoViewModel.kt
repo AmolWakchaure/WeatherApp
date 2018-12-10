@@ -21,13 +21,8 @@ import org.json.JSONArray
 import java.lang.Exception
 import java.nio.charset.Charset
 import java.util.*
-import java.nio.file.Files.size
-import android.widget.Toast
-
-
-
-
-
+import android.support.design.widget.Snackbar
+import android.text.TextUtils
 
 
 class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val context : Context,val activity : WeatherInfoActivity) : ViewModel()
@@ -57,10 +52,23 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
        Functions.returnWeatherInfoInput("location",context, object : ReturnData{
            override fun returnData(location: String) {
 
+               Functions.t("Select metrics")
+               //check weather location is empty
+               if(TextUtils.isEmpty(weatherModel.getLocation()))
+               {
+                   //download weather details
+                   listner.onLocationSelected(location)
+                   weatherModel.setLocation(location)
+                   downloadWeatherDetails()
+               }
+               else
+               {
 
+                   listner.onLocationSelected(weatherModel.getLocation()!!)
+                   weatherModel.setLocation(location)
 
-               listner.onLocationSelected(location)
-               weatherModel.setLocation(location)
+               }
+
            }
 
        })
@@ -69,9 +77,11 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
     //to perform onclick for select metricks
     fun onSelectMetricks(view : View)
     {
+
         Functions.returnWeatherInfoInput("metricks",context, object : ReturnData{
             override fun returnData(metricks: String) {
 
+                Functions.t("Select year")
                 listner.onMetricsSelected(metricks)
                 weatherModel.setMetricks(metricks)
 
@@ -94,15 +104,19 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
                 yearsData = tbl_WEATHER_INFO.checkYearDataExists(metricksInput!!,location)
 
                 if(yearsData.isEmpty()){
+
+                    //download weather details
                     downloadWeatherDetails()
                 }
                 else{
+                    //display weather details
                     setYearWiseData()
                 }
             }
 
         });
     }
+    //download weather details firs time
     fun downloadWeatherDetailsFirstTime(){
 
 
@@ -111,16 +125,19 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
         listner.onYearSelected("2017")
         metricksInput = "Tmax"
 
+        //check weather details available in local db else download it
         weatherInfoList = tbl_WEATHER_INFO.checkWeatherDataExists(metricksInput!!,"England","2017")
 
         if(weatherInfoList.isEmpty())
         {
+            //download weather details
             weatherModel.setLocation("England")
             weatherModel.setYear("2017")
             downloadWeatherDetails()
         }
         else
         {
+            //display weather details
             weatherModel.setLocation("England")
             weatherModel.setYear("2017")
             setYearWiseData()
@@ -128,6 +145,7 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
 
 
     }
+    //download weather details
     fun downloadWeatherDetails()
     {
         //check internet or wifi enable or disable
@@ -136,32 +154,38 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
         }
         else
         {
+            //notify user when no connection
             Functions.t(MyApplication.context.resources.getString(R.string.checkNetwork))
         }
     }
+    //select year wise weather info
     private fun setYearWiseData()
     {
-
 
         var location =  weatherModel.getLocation()!!
         var year =  weatherModel.getYear()!!
 
-        /*Log.e("WEATHERAPP","location : "+location)
-        Log.e("WEATHERAPP","year : "+year)
-        Log.e("WEATHERAPP","metrics : "+metricksInput!!)*/
-
         weatherInfoList.clear()
+        //get weather info year wise from sqlite
         weatherInfoList = tbl_WEATHER_INFO.checkWeatherDataExists(metricksInput!!,location,year)
         listner.onWeatherInfoDownloadSuccess(weatherInfoList)
 
     }
 
-    //var data: Array<String>? = null
+
     //to perform onclick for select year
     fun onSelectYear(view : View)
     {
 
+        if(yearsData.isEmpty())
+        {
+            //get year data from sqlite when metrics and location is selected
+            yearsData = tbl_WEATHER_INFO.checkYearDataExists(metricksInput!!,weatherModel.getLocation()!!)
+        }
 
+
+        //sort year data
+        Collections.sort(yearsData,Collections.reverseOrder())
         var arr = arrayOfNulls<String>(yearsData.size)
         arr = yearsData.toArray(arr)
 
@@ -191,12 +215,14 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
 
         try
         {
+            //progress dialog for user to wait
             var progressDialog = ProgressDialog(context);
-            progressDialog.setMessage("Loading...")
+            progressDialog.setMessage("Downloading weather details...")
             progressDialog.setCancelable(false)
             progressDialog.show()
 
 
+            // make request to get weather info
             val stringRequest = object : StringRequest
                     (
 
@@ -214,7 +240,16 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
                         {
 
                             progressDialog.dismiss()
-                            listner.notifyUser("Volley : "+volleyError)
+                            //notify user when request time out
+                            val snackbar = Snackbar
+                                .make(WeatherInfoActivity.mainLayoutLi as View, "Oops ! request timed out try again.", Snackbar.LENGTH_LONG)
+                                .setAction("Try again") {
+
+                                    //try again when server request timed out
+                                    downloadWeatherInfo(metricks,location)
+                                }
+
+                            snackbar.show()
 
                         }
                     }
@@ -222,6 +257,7 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
                 )
                 {
 
+                    //parse weather info response in worker thread and store into local db
                    override fun parseNetworkResponse(response: NetworkResponse?): Response<String>
                    {
 
@@ -257,10 +293,10 @@ class WeatherInfoViewModel (private val listner : WeatherInfoCallbacks,val conte
 
 
                            }
+                           //get year data from sqlite
                            yearsData = tbl_WEATHER_INFO.checkYearDataExists(metricks,location)
-                           //setYearWiseData()
-                           //Log.i("response", weatherInfoResponse)
 
+                           //update ui with downloaded weather info
                            activity.runOnUiThread(
                                    object : Runnable
                                    {

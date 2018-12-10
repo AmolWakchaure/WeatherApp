@@ -52,7 +52,7 @@ class MyApplication : Application()
     fun <T> addToRequestQueue(request: Request<T>)
     {
         request.tag = TAG
-        request.retryPolicy = DefaultRetryPolicy(50000, 0, 0F)
+        request.retryPolicy = DefaultRetryPolicy(30000, 0, 0F)
         requestQueue?.add(request)
     }
 }

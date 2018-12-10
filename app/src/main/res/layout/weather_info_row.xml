@@ -27,6 +27,7 @@
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5pt"
         android:orientation="horizontal">
             <com.example.weatherapp.fonts.MyTextViewBold android:layout_width="wrap_content"
                                                          android:layout_height="wrap_content"
