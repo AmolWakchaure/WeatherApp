@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".weatherinfo.view.WeatherInfoActivity">
+    <data>
+        <variable name="weatherInfoViewModel"
+                  type="com.example.weatherapp.weatherinfo.viewmodel.WeatherInfoViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#3333ff"
+            android:orientation="vertical">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:layout_weight="2.5">
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                <com.example.weatherapp.fonts.MyTextViewBold
+                        android:id="@+id/locationTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:drawableLeft="@drawable/ic_location"
+                        android:textColor="@color/colorWhite"
+
+                        android:drawablePadding="5dp"
+                                                             android:text="England"/>
+                <ImageView
+                        android:id="@+id/imageStatus"
+                        android:layout_width="25pt"
+                           android:src="@drawable/ic_rainfall"
+                           android:layout_height="25pt"/>
+                <com.example.weatherapp.fonts.MyTextViewNormal
+                        android:id="@+id/unitTxt"
+                        android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+
+
+                                                               android:textColor="@color/colorWhite"
+                                                               android:text="Min Temprature"/>
+                <com.example.weatherapp.fonts.MyTextViewNormal
+                        android:id="@+id/yearText"
+                        android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+
+
+                                                               android:textColor="@color/colorWhite"
+                                                               android:text="2018"/>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="5pt"
+                    android:layout_weight="1.5">
+                <com.example.weatherapp.fonts.MyButton android:id="@+id/locationText"
+                                                       android:layout_width="fill_parent"
+                                                       android:layout_height="15pt"
+                                                       android:textAllCaps="false"
+
+
+                                                       android:background="@drawable/drawable_round"
+                                                       android:onClick="@{weatherInfoViewModel::onSelectLocation}"
+                                                       android:textColor="@color/colorBlack"
+                                                       android:text="Location"/>
+                <com.example.weatherapp.fonts.MyButton android:id="@+id/metricsText"
+                                                       android:layout_width="fill_parent"
+                                                       android:layout_height="15pt"
+                                                       android:textAllCaps="false"
+
+                                                       android:layout_marginTop="5pt"
+                                                       android:onClick="@{weatherInfoViewModel::onSelectMetricks}"
+                                                       android:background="@drawable/drawable_round"
+                                                       android:textColor="@color/colorBlack"
+                                                       android:text="Metrics"/>
+                <com.example.weatherapp.fonts.MyButton android:id="@+id/yearTxt"
+                                                       android:layout_width="fill_parent"
+                                                       android:layout_height="15pt"
+                                                       android:textAllCaps="false"
+                                                       android:layout_marginTop="5pt"
+                                                       android:background="@drawable/drawable_round"
+                                                       android:textColor="@color/colorBlack"
+                                                       android:onClick="@{weatherInfoViewModel::onSelectYear}"
+
+                                                       android:text="Year"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/round_back"
+                android:layout_weight="1">
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/weatherInfoRecyc"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</layout>

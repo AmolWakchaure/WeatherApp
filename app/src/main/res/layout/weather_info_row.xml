@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="60pt">
+
+
+        <com.example.weatherapp.fonts.MyTextViewNormal android:layout_width="wrap_content"
+                                                       android:layout_height="wrap_content"
+
+                                                       android:textColor="@color/colorPrimary"
+                                                       android:text="Dec 2018"
+                                                       android:id="@+id/yearTxt"/>
+
+        <ImageView
+                android:id="@+id/imageStatus"
+                android:layout_width="20pt"
+                android:layout_height="25pt"
+                android:visibility="gone"
+                android:src="@drawable/ic_sun"/>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <com.example.weatherapp.fonts.MyTextViewBold android:layout_width="wrap_content"
+                                                         android:layout_height="wrap_content"
+                                                         android:text="50"
+                                                         android:textSize="15pt"
+                                                         android:id="@+id/valueTxt"/>
+            <com.example.weatherapp.fonts.MyTextViewBold android:layout_width="wrap_content"
+                                                         android:layout_height="wrap_content"
+                                                         android:text="c"
+                                                         android:textSize="7pt"
+                                                         android:id="@+id/valueUnitTxt"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

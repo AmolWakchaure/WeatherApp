@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+
+    <string name="checkNetwork">Oops ! please check your internet connection</string>
+
+    <!--Location Data-->
+    <string-array name="locationArray">
+        <item>England</item>
+        <item>Scotland</item>
+        <item>UK</item>
+        <item>Wales</item>
+    </string-array>
+    <!--Metrics Data-->
+    <string-array name="metricsArray">
+        <item>Max Temperature</item>
+        <item>Min Temperature</item>
+        <item>Rainfall</item>
+    </string-array>
+
+</resources>
